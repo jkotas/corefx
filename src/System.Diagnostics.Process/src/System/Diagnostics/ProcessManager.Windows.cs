@@ -430,8 +430,8 @@ namespace System.Diagnostics
                     }
 
                     IntPtr moduleHandle = moduleHandles[i];
-                    Interop.mincore.NtModuleInfo ntModuleInfo = new Interop.mincore.NtModuleInfo();
-                    if (!Interop.mincore.GetModuleInformation(processHandle, moduleHandle, ntModuleInfo, Marshal.SizeOf(ntModuleInfo)))
+                    Interop.mincore.NtModuleInfo ntModuleInfo = default(NtModuleInfo);
+                    if (!Interop.mincore.GetModuleInformation(processHandle, moduleHandle, out ntModuleInfo, sizeof(ntModuleInfo)))
                     {
                         HandleError();
                         continue;
@@ -503,8 +503,8 @@ namespace System.Diagnostics
 
         public static int GetProcessIdFromHandle(SafeProcessHandle processHandle)
         {
-            Interop.NtDll.NtProcessBasicInfo info = new Interop.NtDll.NtProcessBasicInfo();
-            int status = Interop.NtDll.NtQueryInformationProcess(processHandle, Interop.NtDll.NtQueryProcessBasicInfo, info, (int)Marshal.SizeOf(info), null);
+            Interop.NtDll.NtProcessBasicInfo info = default(NtProcessBasicInfo);
+            int status = Interop.NtDll.NtQueryInformationProcess(processHandle, Interop.NtDll.NtQueryProcessBasicInfo, info, sizeof(NtProcessBasicInfo), null);
             if (status != 0)
             {
                 throw new InvalidOperationException(SR.CantGetProcessId, new Win32Exception(status));
@@ -957,28 +957,26 @@ namespace System.Diagnostics
             while (true)
             {
                 IntPtr currentPtr = (IntPtr)((long)dataPtr + totalOffset);
-                SystemProcessInformation pi = new SystemProcessInformation();
-
-                Marshal.PtrToStructure(currentPtr, pi);
+                SystemProcessInformation pi = (SystemProcessInformation *)currentPtr;
 
                 // get information for a process
                 ProcessInfo processInfo = new ProcessInfo();
                 // Process ID shouldn't overflow. OS API GetCurrentProcessID returns DWORD.
-                processInfo.ProcessId = pi.UniqueProcessId.ToInt32();
-                processInfo.SessionId = (int)pi.SessionId;
-                processInfo.PoolPagedBytes = (long)pi.QuotaPagedPoolUsage; ;
-                processInfo.PoolNonPagedBytes = (long)pi.QuotaNonPagedPoolUsage;
-                processInfo.VirtualBytes = (long)pi.VirtualSize;
-                processInfo.VirtualBytesPeak = (long)pi.PeakVirtualSize;
-                processInfo.WorkingSetPeak = (long)pi.PeakWorkingSetSize;
-                processInfo.WorkingSet = (long)pi.WorkingSetSize;
-                processInfo.PageFileBytesPeak = (long)pi.PeakPagefileUsage;
-                processInfo.PageFileBytes = (long)pi.PagefileUsage;
-                processInfo.PrivateBytes = (long)pi.PrivatePageCount;
-                processInfo.BasePriority = pi.BasePriority;
+                processInfo.ProcessId = pi->UniqueProcessId.ToInt32();
+                processInfo.SessionId = (int)pi->SessionId;
+                processInfo.PoolPagedBytes = (long)pi->QuotaPagedPoolUsage; ;
+                processInfo.PoolNonPagedBytes = (long)pi->QuotaNonPagedPoolUsage;
+                processInfo.VirtualBytes = (long)pi->VirtualSize;
+                processInfo.VirtualBytesPeak = (long)pi->PeakVirtualSize;
+                processInfo.WorkingSetPeak = (long)pi->PeakWorkingSetSize;
+                processInfo.WorkingSet = (long)pi->WorkingSetSize;
+                processInfo.PageFileBytesPeak = (long)pi->PeakPagefileUsage;
+                processInfo.PageFileBytes = (long)pi->PagefileUsage;
+                processInfo.PrivateBytes = (long)pi->PrivatePageCount;
+                processInfo.BasePriority = pi->BasePriority;
 
 
-                if (pi.NamePtr == IntPtr.Zero)
+                if (pi->NamePtr == IntPtr.Zero)
                 {
                     if (processInfo.ProcessId == NtProcessManager.SystemProcessID)
                     {
@@ -996,19 +994,19 @@ namespace System.Diagnostics
                 }
                 else
                 {
-                    string processName = GetProcessShortName(Marshal.PtrToStringUni(pi.NamePtr, pi.NameLength / sizeof(char)));
+                    string processName = GetProcessShortName(Marshal.PtrToStringUni(pi->NamePtr, pi->NameLength / sizeof(char)));
                     processInfo.ProcessName = processName;
                 }
 
                 // get the threads for current process
                 processInfos[processInfo.ProcessId] = processInfo;
 
-                currentPtr = (IntPtr)((long)currentPtr + Marshal.SizeOf(pi));
+                currentPtr = (IntPtr)((long)currentPtr + sizeof(*pi));
                 int i = 0;
-                while (i < pi.NumberOfThreads)
+                while (i < pi->NumberOfThreads)
                 {
-                    SystemThreadInformation ti = new SystemThreadInformation();
-                    Marshal.PtrToStructure(currentPtr, ti);
+                    SystemThreadInformation ti = (SystemThreadInformation *)currentPtr;
+
                     ThreadInfo threadInfo = new ThreadInfo();
 
                     threadInfo._processId = (int)ti.UniqueProcess;
@@ -1020,15 +1018,15 @@ namespace System.Diagnostics
                     threadInfo._threadWaitReason = NtProcessManager.GetThreadWaitReason((int)ti.WaitReason);
 
                     processInfo._threadInfoList.Add(threadInfo);
-                    currentPtr = (IntPtr)((long)currentPtr + Marshal.SizeOf(ti));
+                    currentPtr = (IntPtr)((long)currentPtr + sizeof(*ti));
                     i++;
                 }
 
-                if (pi.NextEntryOffset == 0)
+                if (pi->NextEntryOffset == 0)
                 {
                     break;
                 }
-                totalOffset += pi.NextEntryOffset;
+                totalOffset += pi->NextEntryOffset;
             }
 
             ProcessInfo[] temp = new ProcessInfo[processInfos.Values.Count];
@@ -1088,7 +1086,7 @@ namespace System.Diagnostics
 
         // native struct defined in ntexapi.h
         [StructLayout(LayoutKind.Sequential)]
-        internal class SystemProcessInformation
+        internal struct SystemProcessInformation
         {
             internal uint NextEntryOffset;
             internal uint NumberOfThreads;
@@ -1132,7 +1130,7 @@ namespace System.Diagnostics
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal class SystemThreadInformation
+        internal struct SystemThreadInformation
         {
             private long _KernelTime;
             private long _UserTime;

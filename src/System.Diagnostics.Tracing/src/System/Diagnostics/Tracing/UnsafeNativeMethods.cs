@@ -129,8 +129,6 @@ namespace Microsoft.Win32
                 return HResult;
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
-            [SuppressUnmanagedCodeSecurityAttribute]        // Don't do security checks 
             private static unsafe int EventWriteTransfer(
                     [In] long registrationHandle,
                     [In] ref EventDescriptor eventDescriptor,
@@ -140,16 +138,15 @@ namespace Microsoft.Win32
                     [In] EventProvider.EventData* userData
                     )
             {
-                IntPtr descripPtr = Marshal.AllocHGlobal(Marshal.SizeOf(eventDescriptor));
-                Marshal.StructureToPtr(eventDescriptor, descripPtr, false);
-                int status = Interop.mincore.EventWriteTransfer((ulong)registrationHandle, 
-                                                        (void*)descripPtr, 
-                                                        activityId, 
-                                                        relatedActivityId, 
-                                                        userDataCount, 
-                                                        (void*)userData);
-                Marshal.FreeHGlobal(descripPtr);
-                return status;
+                fixed (EventDescriptor * descripPtr = eventDescriptor)
+                {
+                    return Interop.mincore.EventWriteTransfer((ulong)registrationHandle,
+                                                            (void*)descripPtr,
+                                                            activityId,
+                                                            relatedActivityId,
+                                                            userDataCount,
+                                                            (void*)userData);
+                }
             }
 
             internal enum ActivityControl : uint
@@ -168,8 +165,6 @@ namespace Microsoft.Win32
                 SetTraits,
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
-            [SuppressUnmanagedCodeSecurityAttribute]        // Don't do security checks 
             internal static int EventSetInformation(
                 [In] long registrationHandle,
                 [In] EVENT_INFO_CLASS informationClass,
@@ -220,8 +215,6 @@ namespace Microsoft.Win32
             };
 #pragma warning restore 0649
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2118:ReviewSuppressUnmanagedCodeSecurityUsage")]
-            [SuppressUnmanagedCodeSecurityAttribute]        // Don't do security checks 
             internal static int EnumerateTraceGuidsEx(
                 TRACE_QUERY_INFO_CLASS TraceQueryInfoClass,
                 void* InBuffer,

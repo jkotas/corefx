@@ -21,7 +21,7 @@ internal partial class Interop
             IntPtr hTemplateFile)
         {
             Interop.mincore.CREATEFILE2_EXTENDED_PARAMETERS parameters;
-            parameters.dwSize = (uint)Marshal.SizeOf<Interop.mincore.CREATEFILE2_EXTENDED_PARAMETERS>();
+            parameters.dwSize = (uint)sizeof(Interop.mincore.CREATEFILE2_EXTENDED_PARAMETERS);
 
             parameters.dwFileAttributes = (uint)dwFlagsAndAttributes & 0x0000FFFF;
             parameters.dwSecurityQosFlags = (uint)dwFlagsAndAttributes & 0x000F0000;

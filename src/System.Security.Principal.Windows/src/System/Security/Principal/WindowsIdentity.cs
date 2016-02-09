@@ -788,7 +788,7 @@ namespace System.Security.Principal
         private static SafeLocalAllocHandle GetTokenInformation(SafeAccessTokenHandle tokenHandle, TokenInformationClass tokenInformationClass)
         {
             SafeLocalAllocHandle safeLocalAllocHandle = SafeLocalAllocHandle.InvalidHandle;
-            uint dwLength = (uint)Marshal.SizeOf<uint>();
+            uint dwLength = (uint)sizeof(uint);
             bool result = Interop.mincore.GetTokenInformation(tokenHandle,
                                                           (uint)tokenInformationClass,
                                                           safeLocalAllocHandle,

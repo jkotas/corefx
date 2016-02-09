@@ -490,7 +490,7 @@ namespace System.Diagnostics.Tracing
 #if !ES_BUILD_PCL && !FEATURE_PAL   // TODO command arguments don't work on PCL builds...
             // Determine our session from what is in the registry.  
             string regKey = @"\Microsoft\Windows\CurrentVersion\Winevt\Publishers\{" + m_providerId + "}";
-            if (System.Runtime.InteropServices.Marshal.SizeOf(typeof(IntPtr)) == 8)
+            if (IntPtr.Size == 8)
                 regKey = @"Software" + @"\Wow6432Node" + regKey;
             else
                 regKey = @"Software" + regKey;
@@ -568,7 +568,7 @@ namespace System.Diagnostics.Tracing
             {
 #if (!ES_BUILD_PCL && !PROJECTN && !FEATURE_PAL)
                 string regKey = @"\Microsoft\Windows\CurrentVersion\Winevt\Publishers\{" + m_providerId + "}";
-                if (System.Runtime.InteropServices.Marshal.SizeOf(typeof(IntPtr)) == 8)
+                if (IntPtr.Size == 8)
                     regKey = @"HKEY_LOCAL_MACHINE\Software" + @"\Wow6432Node" + regKey;
                 else
                     regKey = @"HKEY_LOCAL_MACHINE\Software" + regKey;

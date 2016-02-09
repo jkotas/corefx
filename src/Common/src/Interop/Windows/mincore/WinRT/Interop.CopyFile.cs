@@ -15,7 +15,7 @@ internal partial class Interop
             uint copyFlags = failIfExists ? (uint)Interop.mincore.FileOperations.COPY_FILE_FAIL_IF_EXISTS : 0;
             Interop.mincore.COPYFILE2_EXTENDED_PARAMETERS parameters = new Interop.mincore.COPYFILE2_EXTENDED_PARAMETERS()
             {
-                dwSize = (uint)Marshal.SizeOf<Interop.mincore.COPYFILE2_EXTENDED_PARAMETERS>(),
+                dwSize = (uint)sizeof(Interop.mincore.COPYFILE2_EXTENDED_PARAMETERS),
                 dwCopyFlags = copyFlags
             };
 

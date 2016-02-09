@@ -12,14 +12,14 @@ internal partial class Interop
     internal partial class mincore
     {
         [DllImport(Libraries.Psapi_Obsolete, CharSet = CharSet.Unicode, SetLastError = true, EntryPoint = "K32GetModuleInformation")]
-        internal static extern bool GetModuleInformation(SafeProcessHandle processHandle, IntPtr moduleHandle, NtModuleInfo ntModuleInfo, int size);
+        internal static extern bool GetModuleInformation(SafeProcessHandle processHandle, IntPtr moduleHandle, out NtModuleInfo ntModuleInfo, int size);
 
         [StructLayout(LayoutKind.Sequential)]
-        internal class NtModuleInfo
+        internal struct NtModuleInfo
         {
-            internal IntPtr BaseOfDll = (IntPtr)0;
-            internal int SizeOfImage = 0;
-            internal IntPtr EntryPoint = (IntPtr)0;
+            internal IntPtr BaseOfDll;
+            internal int SizeOfImage;
+            internal IntPtr EntryPoint;
         }
     }
 }

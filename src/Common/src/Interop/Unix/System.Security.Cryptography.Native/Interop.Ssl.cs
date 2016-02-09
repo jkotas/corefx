@@ -323,7 +323,7 @@ namespace Microsoft.Win32.SafeHandles
 
         private static readonly byte[] s_tlsServerEndPointByteArray = Encoding.UTF8.GetBytes("tls-server-end-point:");
         private static readonly byte[] s_tlsUniqueByteArray = Encoding.UTF8.GetBytes("tls-unique:");
-        private static readonly int s_secChannelBindingSize = Marshal.SizeOf<SecChannelBindings>();
+        private static readonly int s_secChannelBindingSize = sizeof(SecChannelBindings);
         private readonly int _cbtPrefixByteArraySize;
         private const int CertHashMaxSize = 128;
 
