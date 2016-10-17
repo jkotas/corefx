@@ -1233,6 +1233,7 @@ namespace System
         public static void WaitForPendingFinalizers() { }
 #if netcoreapp11
         public static long GetAllocatedBytesForCurrentThread() { return default(long); }
+        public static void NewGCAPI() { }
 #endif
     }
     public enum GCCollectionMode

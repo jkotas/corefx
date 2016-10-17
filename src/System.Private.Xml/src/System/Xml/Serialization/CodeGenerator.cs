@@ -18,13 +18,16 @@ namespace System.Xml.Serialization
     using System.Xml;
     using System.Xml.Serialization.Configuration;
     using System.Reflection;
-    using System.Reflection.Emit;
     using System.IO;
     using System.Security;
     using System.Text.RegularExpressions;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Xml.Extensions;
+
+    using Internal.Reflection.Emit;
+    using OpCode = System.Reflection.Emit.OpCode;
+    using OpCodes = System.Reflection.Emit.OpCodes;
 
     internal class CodeGenerator
     {

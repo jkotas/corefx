@@ -8,7 +8,6 @@ namespace System.Xml.Serialization
     using System.IO;
     using System.Collections;
     using System.Reflection;
-    using System.Reflection.Emit;
     using System.Xml.Schema;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -18,6 +17,8 @@ namespace System.Xml.Serialization
     using System.Threading;
     using System.Runtime.Versioning;
     using System.Collections.Generic;
+
+    using Internal.Reflection.Emit;
 
     ///<internalonly/>
     public abstract class XmlSerializationWriter : XmlSerializationGeneratedCode

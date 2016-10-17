@@ -6,7 +6,6 @@ namespace System.Xml.Serialization
 {
     using System.Configuration;
     using System.Reflection;
-    using System.Reflection.Emit;
     using System.Collections;
     using System.IO;
     using System;
@@ -24,6 +23,8 @@ namespace System.Xml.Serialization
     using System.Collections.Generic;
 	using System.Xml.Extensions;
     using System.Linq;
+
+    using Internal.Reflection.Emit;
 
     internal class TempAssembly
     {

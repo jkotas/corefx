@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Text;
 using System.Xml.Schema;
 using System.Xml.Extensions;
+
+using Internal.Reflection.Emit;
 
 #if !NET_NATIVE
 namespace System.Xml.Serialization

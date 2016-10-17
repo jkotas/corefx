@@ -487,6 +487,14 @@
     <Compile Include="System\Xml\Extensions\ExtensionMethods.cs" />
     <Compile Include="System\Xml\Serialization\Globals.cs" />
     <Compile Include="System\Xml\Serialization\TypeCode.cs" />
+    <Compile Include="Internal\Reflection\Emit\AssemblyBuilder.cs" />
+    <Compile Include="Internal\Reflection\Emit\ModuleBuilder.cs" />
+    <Compile Include="Internal\Reflection\Emit\TypeBuilder.cs" />
+    <Compile Include="Internal\Reflection\Emit\MethodBuilder.cs" />
+    <Compile Include="Internal\Reflection\Emit\FieldBuilder.cs" />
+    <Compile Include="Internal\Reflection\Emit\LocalBuilder.cs" />
+    <Compile Include="Internal\Reflection\Emit\ILGenerator.cs" />
+    <Compile Include="Internal\Reflection\Emit\Label.cs" />
   </ItemGroup>
   <!-- Embedded DTD files -->
   <ItemGroup>

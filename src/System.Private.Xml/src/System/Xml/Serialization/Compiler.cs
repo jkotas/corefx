@@ -5,7 +5,6 @@
 namespace System.Xml.Serialization
 {
     using System.Reflection;
-    using System.Reflection.Emit;
     using System.Collections;
     using System.IO;
     using System;
@@ -22,6 +21,8 @@ namespace System.Xml.Serialization
     using System.Runtime.CompilerServices;
     using Collections.Generic;
     using Linq;
+
+    using Internal.Reflection.Emit;
 
     internal class Compiler
     {

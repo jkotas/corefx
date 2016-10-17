@@ -12,12 +12,13 @@ namespace System.Xml.Serialization
     using System.Diagnostics;
     using System.Globalization;
     using System.Reflection;
-    using System.Reflection.Emit;
     using System.Security;
     using System.Text.RegularExpressions;
     using System.Xml;
     using System.Xml.Schema;
     using System.Xml.Extensions;
+
+    using Internal.Reflection.Emit;
 
     internal class XmlSerializationReaderILGen : XmlSerializationILGen
     {
